@@ -4,7 +4,7 @@
  * Author:         Quoc Phong Ngo
  * Student ID:   301148406
  * Version:        1.0
- * Date Modified:   November 28th, 2021
+ * Date Modified:   December 2nd, 2021
  */
 
 import UIKit
@@ -45,16 +45,16 @@ class CustomTableViewCell: UITableViewCell {
         contentView.addSubview(dueDateLabel)
         
         //Initialize Edit button
-        let editButton = UIButton(frame: CGRect(x: 8, y: 4.5, width: 48, height: 28))
-        self.editButton = editButton
-        self.frame = frame
+//        let editButton = UIButton(frame: CGRect(x: 8, y: 4.5, width: 48, height: 28))
+//        self.editButton = editButton
+//        self.frame = frame
         
         //Setup Edit button
-        addSubview(editButton)
-        let editImage = UIImage(systemName: "square.and.pencil")
-        editButton.setImage(editImage, for: UIControl.State.normal)
-        editButton.setTitleColor(.blue, for: .normal)
-        editButton.center.y = self.center.y
+//        addSubview(editButton)
+//        let editImage = UIImage(systemName: "square.and.pencil")
+//        editButton.setImage(editImage, for: UIControl.State.normal)
+//        editButton.setTitleColor(.blue, for: .normal)
+//        editButton.center.y = self.center.y
     }
     
     required init?(coder: NSCoder) {

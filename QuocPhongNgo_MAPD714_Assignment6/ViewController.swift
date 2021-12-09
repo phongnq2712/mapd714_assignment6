@@ -4,7 +4,7 @@
  * Author:         Quoc Phong Ngo
  * Student ID:   301148406
  * Version:        1.0
- * Date Modified:   November 28th, 2021
+ * Date Modified:   December 2nd, 2021
  */
 
 import UIKit
@@ -181,6 +181,52 @@ class ViewController: UIViewController {
       
 }
 
+extension ViewController: UITableViewDelegate
+{
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let completeAction = UITableViewRowAction(style: .default, title: "Complete") { action, indexPath in
+            // Mark 'Completed' for this task
+            let cell = self.tableView.cellForRow(at: indexPath) as! CustomTableViewCell
+            let rowData = self.tasks[indexPath.row]
+            cell.dueDate = "Completed"
+            cell.backgroundColor = UIColor.systemGray5
+            // update 'isCompleted' = true
+            self.updateSwipeLeft(taskName: rowData.name)
+//            if(rowData.isCompleted) {
+//                cell.dueDate = "Completed"
+//            } else {
+//                if(rowData.dueDate.isEmpty) {
+//                    cell.dueDate = ""
+//                } else {
+//                    cell.dueDate = rowData.dueDate
+//                }
+//            }
+            self.tableView.cellForRow(at: indexPath)
+        }
+        completeAction.backgroundColor = .yellow
+                
+        return [completeAction]
+    }
+    
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let editAction = UIContextualAction(style: .normal, title: "Edit") {
+            (contextualAction, view, actionPerformed: (Bool) -> ()) in
+            self.pressButton(index: indexPath.row)
+        }
+        editAction.backgroundColor = .blue
+        
+        return UISwipeActionsConfiguration(actions: [editAction])
+    }
+    
+    func updateSwipeLeft(taskName: String)
+    {
+        let ref = self.ref.child(taskName)
+        ref.updateChildValues([
+            "isCompleted": true
+        ])
+    }
+}
+
 extension ViewController: UITableViewDataSource
 {
     
@@ -201,31 +247,56 @@ extension ViewController: UITableViewDataSource
         }
 
         // Add Edit button target (add target only once when the cell is created)
-        cell.editButton.addTarget(self, action: #selector(pressButton), for: .touchUpInside)
-        cell.editButton.tag = indexPath.row
+//        cell.editButton.addTarget(self, action: #selector(pressButton), for: .touchUpInside)
+//        cell.editButton.tag = indexPath.row
         
         // switch view
-        let switchView = UISwitch(frame: .zero)
-        switchView.setOn(false, animated: true)
-        switchView.tag = indexPath.row
-        switchView.addTarget(self, action: #selector(switchChanged(_:)), for: .valueChanged)
-        cell.accessoryView = switchView
+//        let switchView = UISwitch(frame: .zero)
+//        switchView.setOn(false, animated: true)
+//        switchView.tag = indexPath.row
+//        switchView.addTarget(self, action: #selector(switchChanged(_:)), for: .valueChanged)
+//        cell.accessoryView = switchView
+        // swipe right
+//        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(respondToSwipeGesture))
+//        swipeRight.direction = .right
+//        cell.addGestureRecognizer(swipeRight)
+//        swipeRight.view?.tag = indexPath.row
+        
+        // swipe left
+//        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(respondToSwipeGesture))
+//        swipeLeft.direction = .left
+//        self.view.addGestureRecognizer(swipeLeft)
     
         return cell
     }
     
+//    @objc func respondToSwipeGesture(gesture: UIGestureRecognizer) {
+//
+//        if let swipeGesture = gesture as? UISwipeGestureRecognizer {
+//            switch swipeGesture.direction {
+//            case .right:
+//                print("Swiped right")
+//                //pressButton(gesture)
+//            case .left:
+//                print("Swiped left")
+//            default:
+//                break
+//            }
+//        }
+//    }
+    
     /**
      * Selector for changing value of switch 'Due Date'
      */
-    @objc func switchChanged(_ sender: UISwitch)
+    func switchChanged(index: Int)
     {
         // get indexPath for current cell
         if let indexPath = self.tableView.indexPathForSelectedRow
         {
             let cell = self.tableView.cellForRow(at: indexPath) as! CustomTableViewCell
-            let rowData = tasks[sender.tag]
-            if(sender.isOn)
-            {
+            let rowData = tasks[index]
+//            if(sender.isOn)
+//            {
                 if(rowData.isCompleted) {
                     cell.dueDate = "Completed"
                 } else {
@@ -235,9 +306,9 @@ extension ViewController: UITableViewDataSource
                         cell.dueDate = rowData.dueDate
                     }
                 }
-            } else {
-                cell.dueDate = ""
-            }
+//            } else {
+//                cell.dueDate = ""
+//            }
             self.tableView.cellForRow(at: indexPath)
         }
     }
@@ -245,20 +316,19 @@ extension ViewController: UITableViewDataSource
     /**
      * Selector for pressing button Edit
      */
-    @objc func pressButton(_ sender: UIButton) {
+    func pressButton(index: Int) {
         if let vc = storyboard?.instantiateViewController(identifier: "DetailViewController") as? DetailViewController {
-            vc.taskNameText = tasks[sender.tag].name
-            vc.notesText = tasks[sender.tag].notes
-            vc.isCompletedText = tasks[sender.tag].isCompleted
-            vc.hasDueDateText = tasks[sender.tag].hasDueDate
+            vc.taskNameText = tasks[index].name
+            vc.notesText = tasks[index].notes
+            vc.isCompletedText = tasks[index].isCompleted
+            vc.hasDueDateText = tasks[index].hasDueDate
             
-            if(!tasks[sender.tag].dueDate.isEmpty) {
+            if(!tasks[index].dueDate.isEmpty) {
                 let dateFormatter = DateFormatter()
                 dateFormatter.dateFormat = "YY/MM/dd"
-                let dueDate = dateFormatter.date(from:tasks[sender.tag].dueDate)
+                let dueDate = dateFormatter.date(from:tasks[index].dueDate)
                 vc.dueDateText = dueDate
             }
-            
             navigationController?.pushViewController(vc, animated: true)
         }
     }
