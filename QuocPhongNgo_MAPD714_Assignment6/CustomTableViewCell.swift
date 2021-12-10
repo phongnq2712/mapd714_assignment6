@@ -44,17 +44,6 @@ class CustomTableViewCell: UITableViewCell {
         dueDateLabel = UILabel(frame: genreValueRect)
         contentView.addSubview(dueDateLabel)
         
-        //Initialize Edit button
-//        let editButton = UIButton(frame: CGRect(x: 8, y: 4.5, width: 48, height: 28))
-//        self.editButton = editButton
-//        self.frame = frame
-        
-        //Setup Edit button
-//        addSubview(editButton)
-//        let editImage = UIImage(systemName: "square.and.pencil")
-//        editButton.setImage(editImage, for: UIControl.State.normal)
-//        editButton.setTitleColor(.blue, for: .normal)
-//        editButton.center.y = self.center.y
     }
     
     required init?(coder: NSCoder) {
